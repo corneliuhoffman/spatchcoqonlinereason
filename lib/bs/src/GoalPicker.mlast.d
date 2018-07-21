@@ -1,0 +1,1 @@
+src/GoalPicker.cmj : src/technical/coqmanager.cmj src/technical/index.cmj src/technical/utils.cmj

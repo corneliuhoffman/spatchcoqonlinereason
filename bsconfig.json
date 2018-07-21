@@ -1,0 +1,26 @@
+{
+  "name": "reason-to-do",
+  "reason": {
+    "react-jsx": 2
+  },
+  "refmt": 3,
+  "bs-dependencies": ["reason-react",
+
+    "bs-express",
+    "bs-json",
+    "bs-fetch",
+    "bs-director",
+    "bs-webapi",
+    "reason-react-primitives",
+    "bs-webworkers",
+    "bs-reactstrap",
+    "bs-ant-design",
+    "@glennsl/bs-json",
+  ],
+  "sources": [{
+    "dir": "src",
+    "subdirs": [{
+      "dir": "technical"
+    }]
+  }]
+}

@@ -1,0 +1,1 @@
+[@bs.module] external Mirror : ReasonReact.reactClass = "./myJSReactClass";

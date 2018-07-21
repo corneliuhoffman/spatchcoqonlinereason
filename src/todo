@@ -1,0 +1,6 @@
+save should close window.
+fix errors in proofs (ie for the "reflexivity" in 1=1)
+fix error in intriduction of variables, definitions and notations.
+tactics dropdown
+help dropdown
+tooltips

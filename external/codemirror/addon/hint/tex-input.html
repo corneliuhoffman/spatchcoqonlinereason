@@ -1,0 +1,140 @@
+<!doctype html>
+
+<title>CodeMirror: Markdown mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="../doc/docs.css">
+
+<link rel="stylesheet" href="../lib/codemirror.css">
+<link rel="stylesheet" href="../addon/hint/show-hint.css">
+
+<script src="../lib/codemirror.js"></script>
+<script src="../mode/markdown/markdown.js"></script>
+<script src="../addon/hint/show-hint.js"></script>
+<script src="../addon/hint/tex-input-hint.js"></script>
+
+<style type="text/css">
+      .CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
+      .cm-s-default .cm-trailing-space-a:before,
+      .cm-s-default .cm-trailing-space-b:before {position: absolute; content: "\00B7"; color: #777;}
+      .cm-s-default .cm-trailing-space-new-line:before {position: absolute; content: "\21B5"; color: #777;}
+    </style>
+<div id=nav>
+  <a href="http://codemirror.net"><h1>CodeMirror</h1><img id=logo src="../doc/logo.png"></a>
+
+  <ul>
+    <li><a href="../index.html">Home</a>
+    <li><a href="../doc/manual.html">Manual</a>
+    <li><a href="https://github.com/codemirror/codemirror">Code</a>
+  </ul>
+  <ul>
+    <li><a href="../index.html">Language modes</a>
+    <li><a class=active href="#">Markdown</a>
+  </ul>
+</div>
+
+<article>
+<h2>Markdown mode</h2>
+<form><textarea id="code" name="code">
+*Using TeX-style Symbols*
+------------------------------------------------
+
+_TeX_-style symbols are names prefixed by a `\`.
+
+You can try to input symbols in this buffer by pressing `\`,
+
+Typing `\alpha` should input α.
+
+You can try more. This completion should work anywhere on the text,
+but beware is experimental.
+
+## Some more symbols:
+
+- \Gamma : Γ
+- \lnot: ¬
+
+</textarea></form>
+
+  <p>Press <strong>\</strong> to activate autocompletion. Built
+  on top of the <a href="../doc/manual.html#addon_show-hint"><code>show-hint</code></a>
+  and <a href="../doc/manual.html#addon_tex-input-hint"><code>TeX-input-hint</code></a>
+  addons.</p>
+
+
+
+    <script>
+ comp= [["asynchronous", "nonsynchronous"],
+    ["completion", "achievement", "conclusion", "culmination", "expirations"],
+    ["hinting", "advive", "broach", "imply"],
+    ["hinge"],
+    ["function","action"],
+    ["provide", "add", "bring", "give"],
+    ["synonyms", "Equivalents"],
+    ["wOrds of wisdom", "token"],
+    ["each", "every"],
+  ]
+
+// CodeMirror.registerHelper('hint', 'ajax', (cm, option)=> {
+//     return new Promise(function(accept) {
+//       setTimeout(function() {
+//         var list =[]
+//         var cursor = cm.getCursor(), line = cm.getLine(cursor.line)
+//         var start = cursor.ch, end = cursor.ch
+//         while (start && /\w/.test(line.charAt(start - 1))) --start
+//         while (end < line.length && /\w/.test(line.charAt(end))) ++end
+//         var word = line.toLowerCase().replace(/ +(?= )/g,'');
+//         for (var i = 0; i < comp.length; i++) if (comp[i][0].toLowerCase().includes(word)){
+//                   list.push(comp[i][0])}
+//         return accept({list: list,
+//                          from: CodeMirror.Pos(cursor.line, start),
+//                          to: CodeMirror.Pos(cursor.line, end)})
+        
+//       }, 100)
+//     })
+//   }
+
+CodeMirror.registerHelper('hint', 'spatch', (mirror, callback) => {
+    let words =  merged = [].concat.apply([], comp);;
+    let cur = mirror.getCursor();
+    var line = mirror.getLine(cur.line)
+    var word = line.toLowerCase().replace(/ +(?= )/g,'').trim();
+    let range = mirror.findWordAt(cur);
+    let fragment = mirror.getRange(range.anchor, range.head);
+    callback({
+        list: words.filter(w => w.indexOf(word) === 0),
+        from: range.anchor,
+        to: range.head
+    });
+});
+CodeMirror.hint.spatch.async = true;
+
+CodeMirror.commands.autocomplete = function(mirror) {
+  var cur = mirror.getCursor()
+  var curPos   = CodeMirror.Pos(cur.line, cur.ch);
+    var matchEnd = CodeMirror.Pos(cur.line, cur.ch);
+
+    var match = "";
+
+    while ( 0 <= curPos.ch ) {
+      curPos.ch--;
+      match = editor.getRange(curPos, matchEnd);
+      if (match[0] == '\\') break;
+    }
+if (match[0] == '\\'){mirror.showHint({ hint: CodeMirror.hint.texinput });}
+  else{
+    mirror.showHint({ hint: CodeMirror.hint.spatch });}
+  }
+
+
+
+
+
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: 'markdown',
+        lineNumbers: true,
+        theme: "default",
+
+        extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList", "Ctrl-Space": "autocomplete"}});
+     
+    </script>
+
+  </article>

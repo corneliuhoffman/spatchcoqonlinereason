@@ -1,0 +1,152 @@
+bs_package_flags = -bs-package-name reason-to-do
+src_root_dir = /Users/Hoff/Documents/reactut/spatchcoqonlinereason
+bsc = /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-platform/lib/bsc.exe
+bsdep = /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-platform/lib/bsb_helper.exe
+warnings = -w -30-40+6+7+27+32..39+44+45+101
+bsc_flags = -nostdlib -I '/Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-platform/lib/ocaml' -no-alias-deps -color always
+ppx_flags = 
+bs_package_includes = -I /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/reason-react/lib/ocaml -I /Users/Hoff/.npm-global/lib/node_modules/bs-express/lib/ocaml -I /Users/Hoff/.npm-global/lib/node_modules/bs-json/lib/ocaml -I /Users/Hoff/.npm-global/lib/node_modules/bs-fetch/lib/ocaml -I /Users/Hoff/.npm-global/lib/node_modules/bs-director/lib/ocaml -I /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-webapi/lib/ocaml -I /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/reason-react-primitives/lib/ocaml -I /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-webworkers/lib/ocaml -I /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-reactstrap/lib/ocaml -I /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-ant-design/lib/ocaml -I /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/@glennsl/bs-json/lib/ocaml
+bs_package_dev_includes = 
+namespace = 
+bsb_dir_group = 0
+refmt = /Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-platform/lib/refmt.exe
+reason_react_jsx = -ppx '/Users/Hoff/Documents/reactut/spatchcoqonlinereason/node_modules/bs-platform/lib/reactjs_jsx_ppx_2.exe'
+refmt_flags = --print binary
+bsc_lib_includes = -I src/technical -I src
+rule build_ast_and_module_sets_from_re
+  command = ${bsc} -pp "${refmt} ${refmt_flags}" ${reason_react_jsx}  ${ppx_flags} ${warnings} ${bsc_flags} -c -o ${out} -bs-syntax-only -bs-binary-ast -impl ${in}
+  description = [34mBuilding[39m [2m${out}[22m
+build src/Main.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/Main.re
+rule build_deps
+  command = ${bsdep} ${namespace} -g ${bsb_dir_group} -MD ${in}
+  description = [34mBuilding[39m [2m${out}[22m
+build src/Main.mlast.d : build_deps src/Main.mlast
+rule build_cmj_cmi
+  command = ${bsc} ${bs_package_flags} -bs-assume-no-mli -bs-no-builtin-ppx-ml -bs-no-implicit-include ${bs_package_includes} ${bsc_lib_includes} ${bsc_extra_includes} ${warnings} ${bsc_flags} -o ${out} -c  ${in} $postbuild
+  depfile = ${in}.d
+  description = [34mBuilding[39m [2m${out}[22m
+build src/Main.cmj |  $src_root_dir/lib/js/src/Main.js src/Main.cmi : build_cmj_cmi src/Main.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/Save.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/Save.re
+build src/Save.mlast.d : build_deps src/Save.mlast
+build src/Save.cmj |  $src_root_dir/lib/js/src/Save.js src/Save.cmi : build_cmj_cmi src/Save.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/Lists.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/Lists.re
+build src/Lists.mlast.d : build_deps src/Lists.mlast
+build src/Lists.cmj |  $src_root_dir/lib/js/src/Lists.js src/Lists.cmi : build_cmj_cmi src/Lists.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/myTabs.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/myTabs.re
+build src/myTabs.mlast.d : build_deps src/myTabs.mlast
+build src/myTabs.cmj |  $src_root_dir/lib/js/src/myTabs.js src/myTabs.cmi : build_cmj_cmi src/myTabs.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/MenuBar.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/MenuBar.re
+build src/MenuBar.mlast.d : build_deps src/MenuBar.mlast
+build src/MenuBar.cmj |  $src_root_dir/lib/js/src/MenuBar.js src/MenuBar.cmi : build_cmj_cmi src/MenuBar.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/myNTabs.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/myNTabs.re
+build src/myNTabs.mlast.d : build_deps src/myNTabs.mlast
+build src/myNTabs.cmj |  $src_root_dir/lib/js/src/myNTabs.js src/myNTabs.cmi : build_cmj_cmi src/myNTabs.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/NTopBar.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/NTopBar.re
+build src/NTopBar.mlast.d : build_deps src/NTopBar.mlast
+build src/NTopBar.cmj |  $src_root_dir/lib/js/src/NTopBar.js src/NTopBar.cmi : build_cmj_cmi src/NTopBar.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/HypLists.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/HypLists.re
+build src/HypLists.mlast.d : build_deps src/HypLists.mlast
+build src/HypLists.cmj |  $src_root_dir/lib/js/src/HypLists.js src/HypLists.cmi : build_cmj_cmi src/HypLists.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/Buttonrow.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/Buttonrow.re
+build src/Buttonrow.mlast.d : build_deps src/Buttonrow.mlast
+build src/Buttonrow.cmj |  $src_root_dir/lib/js/src/Buttonrow.js src/Buttonrow.cmi : build_cmj_cmi src/Buttonrow.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/Controller.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/Controller.re
+build src/Controller.mlast.d : build_deps src/Controller.mlast
+build src/Controller.cmj |  $src_root_dir/lib/js/src/Controller.js src/Controller.cmi : build_cmj_cmi src/Controller.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/GoalPicker.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/GoalPicker.re
+build src/GoalPicker.mlast.d : build_deps src/GoalPicker.mlast
+build src/GoalPicker.cmj |  $src_root_dir/lib/js/src/GoalPicker.js src/GoalPicker.cmi : build_cmj_cmi src/GoalPicker.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/nGoalPicker.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/nGoalPicker.re
+build src/nGoalPicker.mlast.d : build_deps src/nGoalPicker.mlast
+build src/nGoalPicker.cmj |  $src_root_dir/lib/js/src/nGoalPicker.js src/nGoalPicker.cmi : build_cmj_cmi src/nGoalPicker.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+rule build_ast_and_module_sets
+  command = ${bsc}  ${pp_flags} ${ppx_flags} ${warnings} ${bsc_flags} -c -o ${out} -bs-syntax-only -bs-binary-ast ${in}
+  description = [34mBuilding[39m [2m${out}[22m
+build src/technical/ast.mlast : build_ast_and_module_sets $src_root_dir/src/technical/ast.ml
+build src/technical/ast.mlast.d : build_deps src/technical/ast.mlast
+build src/technical/ast.cmj |  $src_root_dir/lib/js/src/technical/ast.js src/technical/ast.cmi : build_cmj_cmi src/technical/ast.mlast
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/Demo.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/technical/Demo.re
+build src/technical/Demo.mlast.d : build_deps src/technical/Demo.mlast
+build src/technical/Demo.cmj |  $src_root_dir/lib/js/src/technical/Demo.js src/technical/Demo.cmi : build_cmj_cmi src/technical/Demo.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/sexp.mlast : build_ast_and_module_sets $src_root_dir/src/technical/sexp.ml
+build src/technical/sexp.mlast.d : build_deps src/technical/sexp.mlast
+build src/technical/sexp.cmj |  $src_root_dir/lib/js/src/technical/sexp.js src/technical/sexp.cmi : build_cmj_cmi src/technical/sexp.mlast
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/tree.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/technical/tree.re
+build src/technical/tree.mlast.d : build_deps src/technical/tree.mlast
+build src/technical/tree.cmj |  $src_root_dir/lib/js/src/technical/tree.js src/technical/tree.cmi : build_cmj_cmi src/technical/tree.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/index.mlast : build_ast_and_module_sets $src_root_dir/src/technical/index.ml
+build src/technical/index.mlast.d : build_deps src/technical/index.mlast
+build src/technical/index.cmj |  $src_root_dir/lib/js/src/technical/index.js src/technical/index.cmi : build_cmj_cmi src/technical/index.mlast
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/latex.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/technical/latex.re
+build src/technical/latex.mlast.d : build_deps src/technical/latex.mlast
+build src/technical/latex.cmj |  $src_root_dir/lib/js/src/technical/latex.js src/technical/latex.cmi : build_cmj_cmi src/technical/latex.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/sexpm.mlast : build_ast_and_module_sets $src_root_dir/src/technical/sexpm.ml
+build src/technical/sexpm.mlast.d : build_deps src/technical/sexpm.mlast
+build src/technical/sexpm.cmj |  $src_root_dir/lib/js/src/technical/sexpm.js src/technical/sexpm.cmi : build_cmj_cmi src/technical/sexpm.mlast
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/utils.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/technical/utils.re
+build src/technical/utils.mlast.d : build_deps src/technical/utils.mlast
+build src/technical/utils.cmj |  $src_root_dir/lib/js/src/technical/utils.js src/technical/utils.cmi : build_cmj_cmi src/technical/utils.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/commands.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/technical/commands.re
+build src/technical/commands.mlast.d : build_deps src/technical/commands.mlast
+build src/technical/commands.cmj |  $src_root_dir/lib/js/src/technical/commands.js src/technical/commands.cmi : build_cmj_cmi src/technical/commands.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/tutorial.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/technical/tutorial.re
+build src/technical/tutorial.mlast.d : build_deps src/technical/tutorial.mlast
+build src/technical/tutorial.cmj |  $src_root_dir/lib/js/src/technical/tutorial.js src/technical/tutorial.cmi : build_cmj_cmi src/technical/tutorial.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/coqmanager.mlast : build_ast_and_module_sets_from_re $src_root_dir/src/technical/coqmanager.re
+build src/technical/coqmanager.mlast.d : build_deps src/technical/coqmanager.mlast
+build src/technical/coqmanager.cmj |  $src_root_dir/lib/js/src/technical/coqmanager.js src/technical/coqmanager.cmi : build_cmj_cmi src/technical/coqmanager.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/formulalexer.mlast : build_ast_and_module_sets $src_root_dir/src/technical/formulalexer.ml
+build src/technical/formulalexer.mlast.d : build_deps src/technical/formulalexer.mlast
+build src/technical/formulalexer.cmj |  $src_root_dir/lib/js/src/technical/formulalexer.js src/technical/formulalexer.cmi : build_cmj_cmi src/technical/formulalexer.mlast
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/formulaparser.mlast : build_ast_and_module_sets $src_root_dir/src/technical/formulaparser.ml
+build src/technical/formulaparser.mlast.d : build_deps src/technical/formulaparser.mlast
+build src/technical/formulaparser.cmj |  $src_root_dir/lib/js/src/technical/formulaparser.js src/technical/formulaparser.cmi : build_cmj_cmi src/technical/formulaparser.mlast
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build src/technical/formulaparsing.mlast : build_ast_and_module_sets $src_root_dir/src/technical/formulaparsing.ml
+build src/technical/formulaparsing.mlast.d : build_deps src/technical/formulaparsing.mlast
+build src/technical/formulaparsing.cmj |  $src_root_dir/lib/js/src/technical/formulaparsing.js src/technical/formulaparsing.cmi : build_cmj_cmi src/technical/formulaparsing.mlast
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src/technical
+build build.ninja : phony  ||  src/technical/formulaparsing.mlast.d src/technical/formulaparser.mlast.d src/technical/formulalexer.mlast.d src/technical/coqmanager.mlast.d src/technical/tutorial.mlast.d src/technical/commands.mlast.d src/technical/utils.mlast.d src/technical/sexpm.mlast.d src/technical/latex.mlast.d src/technical/index.mlast.d src/technical/tree.mlast.d src/technical/sexp.mlast.d src/technical/Demo.mlast.d src/technical/ast.mlast.d src/nGoalPicker.mlast.d src/GoalPicker.mlast.d src/Controller.mlast.d src/Buttonrow.mlast.d src/HypLists.mlast.d src/NTopBar.mlast.d src/myNTabs.mlast.d src/MenuBar.mlast.d src/myTabs.mlast.d src/Lists.mlast.d src/Save.mlast.d src/Main.mlast.d

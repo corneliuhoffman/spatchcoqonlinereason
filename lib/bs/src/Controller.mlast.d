@@ -1,0 +1,1 @@
+src/Controller.cmj : src/Buttonrow.cmj src/technical/commands.cmj src/technical/coqmanager.cmj src/Lists.cmj src/MenuBar.cmj src/myTabs.cmj src/Save.cmj src/technical/tree.cmj src/technical/tutorial.cmj src/technical/utils.cmj

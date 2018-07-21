@@ -1,0 +1,178 @@
+<!doctype html>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-118408832-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-118408832-1');
+</script>
+
+
+<meta charset=utf8>
+<title>SpatchCoq
+</title>
+
+<head>
+    <script src="./commands.js"></script>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+    <script src="../external/codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="../external/codemirror/theme/night.css">
+    <link rel="stylesheet" href="../external/codemirror/lib/codemirror.css">
+    <script src="../external/codemirror/addon/hint/show-hint.js"></script>
+    <script src="../external/codemirror/addon/hint/tex-input-hint.js"></script>
+    <link rel="stylesheet" href="../external/codemirror/addon/hint/show-hint.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
+
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+        MathJax.Hub.Config({
+            extensions: ["tex2jax.js"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+            tex2jax: {
+                inlineMath: [
+                    ["$", "$"],
+                    ["\\(", "\\)"]
+                ]
+            },
+            AssistiveMML: {
+                disabled: true
+            }
+        });
+    </script>
+    <style type="text/css">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+
+        }
+    </style>
+</head>
+<link rel="stylesheet" href="./styles.css">
+
+<body>
+
+    <div id="root"></div>
+    <script src="./Main.js"></script>
+    <script src="./Tree.js"></script>
+    <script src="./Latex.js"></script>
+    <script src="./Index.js"></script>
+    <script src="./Coqmanager.js"></script>
+    <script src="./Controller.js"></script>
+
+
+    <script>
+        var allpretrees;
+        var comp1 = commandstr.map(function (x) {
+            return x[1].replace(/\'/g, "")
+        })
+        var comp = comp1.map(function (x) {
+            var v = /Notation(.*?):=/.exec(x)[1]
+
+            return v.replace(/constr\(.?\)|hyp\(.?\)|reference\(.?\)|ident\(.?\)/g, " VAR ").trim().concat(".")
+        })
+
+
+        CodeMirror.registerHelper('hint', 'spatch', (mirror, callback) => {
+            let words = comp;;
+            var list = []
+            let cur = mirror.getCursor();
+            var line = mirror.getLine(cur.line)
+            var word = line.toLowerCase().replace(/ +(?= )/g, '').trim();
+            let range = mirror.findWordAt(cur);
+            let fragment = mirror.getRange(range.anchor, range.head);
+            for (var i = 0; i < comp.length; i++)
+                if (comp[i].toLowerCase().includes(word)) {
+                    list.push(comp[i])
+                }
+
+            callback({
+                list: list,
+                from: range.anchor,
+                to: range.head
+            });
+        });
+        CodeMirror.hint.spatch.async = true;
+
+        CodeMirror.commands.autocomplete = function (mirror) {
+            var cur = mirror.getCursor()
+            var curPos = CodeMirror.Pos(cur.line, cur.ch);
+            var matchEnd = CodeMirror.Pos(cur.line, cur.ch);
+
+            var match = "";
+
+            while (0 <= curPos.ch) {
+                curPos.ch--;
+                match = editor2.getRange(curPos, matchEnd);
+                if (match[0] == '\\') break;
+            }
+            if (match[0] == '\\') {
+                mirror.showHint({
+                    hint: CodeMirror.hint.texinput
+                });
+            } else {
+                mirror.showHint({
+                    hint: CodeMirror.hint.spatch
+                });
+            }
+        }
+    </script>
+    <div position: "absolute" display: "flex" flex-direction: "column" height: "100%" width: "100%">
+        <script>
+            var editor2 = CodeMirror.fromTextArea(document.getElementById("haha"), {
+                mode: 'markdown',
+                lineNumbers: false,
+                theme: "default",
+                overflow: "slide",
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                width: "100%",
+                height: "100%",
+
+
+
+
+                extraKeys: {
+                    "Enter": "newlineAndIndentContinueMarkdownList",
+                    "Ctrl-Space": "autocomplete"
+                }
+            });
+        </script>
+    </div>
+    <script>
+        editor2.setSize(width = "100%", height = "100%")
+
+        editor2.classname = "mi"
+        editor2.on('change', function (cMirror, ob) {
+            cMirror.save();
+            let ed = document.getElementById("haha");
+
+
+        });
+        // }
+    </script>
+
+
+
+</body>

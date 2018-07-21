@@ -1,0 +1,1 @@
+src/technical/coqmanager.cmj : src/technical/formulaparsing.cmj src/technical/index.cmj
